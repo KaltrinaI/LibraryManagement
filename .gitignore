@@ -1,0 +1,56 @@
+# Root-level files
+*.env
+*.log
+.env.*
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# Frontend (React)
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+frontend/.env.development
+frontend/.env.production
+frontend/.env.test
+
+# PHP Services (Order Service)
+order-service/vendor/
+order-service/*.env
+order-service/.env.*
+
+# Python Services (User and Catalogue)
+user-service/__pycache__/
+user-service/*.pyc
+user-service/*.pyo
+user-service/*.pyd
+user-service/*.env
+catalogue-service/__pycache__/
+catalogue-service/*.pyc
+catalogue-service/*.pyo
+catalogue-service/*.pyd
+catalogue-service/*.env
+
+# Docker
+docker-compose.override.yml
+*.tmp
+*.log
+
+# IDE/Editor settings
+.vscode/
+.idea/
+
+# Coverage
+coverage/
+*.coverage
+*.lcov
+.nyc_output/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+database/catalog-db/mysql.sock
+database/order-db/mysql.sock
+database/user-db/mysql.sock

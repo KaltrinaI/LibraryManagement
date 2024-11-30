@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: catalog-backend
+    environment:
+      DB_HOST: database                    # Service name of the database
+      DB_NAME: catalog                    # Database name
+      DB_USER: catalog_user               # Matches MYSQL_USER
+      DB_PASS: catalog_pass               # Matches MYSQL_PASSWORD
+    depends_on:
+      - database                          # Ensure the database starts before backend
+    networks:
+      - catalog-net
+    ports:
+      - "5000:5000"                       # Maps Flask app to host port
+
+  database:
+    build:
+      context: ./database
+    container_name: catalog-database
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass       # Root password for MySQL
+      MYSQL_DATABASE: catalog             # Name of the database
+      MYSQL_USER: catalog_user            # MySQL user
+      MYSQL_PASSWORD: catalog_pass        # Password for the user
+    ports:
+      - "3306:3306"                       # Expose MySQL's default port
+    volumes:
+      - ./database/scripts/db/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./database/scripts/db/init.sh:/docker-entrypoint-initdb.d/init.sh
+    networks:
+      - catalog-net
+
+networks:
+  catalog-net:

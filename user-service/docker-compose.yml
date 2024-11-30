@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  user-service:
+    build:
+      context: ./backend                # Build the backend from the `backend` folder
+      dockerfile: Dockerfile            # Dockerfile for the backend
+    container_name: user-service
+    environment:
+      DB_HOST: database
+      DB_NAME: user_service_db
+      DB_USER: user_service_user
+      DB_PASS: user_service_pass
+    depends_on:
+      - database
+    networks:
+      - catalog-net
+    ports:
+      - "5001:5001"
+
+  database:
+    build:
+      context: ./database               # Build the database from the `database` folder
+      dockerfile: Dockerfile            # Dockerfile for the database
+    container_name: user-database
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: user_service_db
+      MYSQL_USER: user_service_user
+      MYSQL_PASSWORD: user_service_pass
+    networks:
+      - catalog-net
+    volumes:
+      - ./database/scripts/db/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./database/scripts/db/init.sh:/docker-entrypoint-initdb.d/init.sh
+    ports:
+      - "3306:3306"
+
+networks:
+  catalog-net:
+    driver: bridge
